@@ -24,6 +24,14 @@ app.get('/messages', (req, res) => {
     })
 })
 
+app.get('/messages/:user', (req, res) => {
+    Message.find({
+        name: req.params.user
+    }, (err, messages) => {
+        res.json(messages);
+    })
+})
+
 app.post('/messages', async (req, res) => {
     try {
         let message = new Message(req.body);
