@@ -48,12 +48,11 @@
             $("#messages").append(`<h4> ${message.name} </h4> <p> ${message.message} </p>`)
         }
 
-        function getMessages() {
-            $.get("/messages", (data) => {
-                data.map((message) => {
-                    addMessages(message);
-                })
-            })
+        getMessages = async () => {
+            let messages = await $.get("/messages");
+            messages.forEach(message => {
+                addMessages(message);
+            });
         }
 
         function postMessage(message) {

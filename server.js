@@ -18,20 +18,28 @@ let Message = mongoose.model('Message', {
 
 messages = []
 app.get('/messages', (req, res) => {
+    
     Message.find({}, (err, messages) => {
         res.json(messages);
     })
 })
 
-app.post('/messages', (req, res) => {
-    let message = new Message(req.body);
-    message.save((err) => {
+app.post('/messages', async (req, res) => {
+    try {
+        let message = new Message(req.body);
+        let err = await message.save();
+        
         if(err) res.sendStatus(500);
+        
         messages.push(req.body);
         io.emit('message', req.body);
-        res.sendStatus(200);
-    })
-})
+    } catch (err) {
+        return console.error(err);
+    } finally {
+        // logger 
+        console.log('Add logger here');
+    }
+})  
 
 io.on('connection', (socket) => {
     console.log('an user connected');
